@@ -42,6 +42,8 @@ export default function Index() {
 
   const handlePressCard = (p: PokemonCardData) => {
     const showButton = p.id !== favoritePokemon?.id;
+    console.log(favoritePokemon?.id, p.id);
+    console.log("Show button:", showButton);
     bottomSheetRef.current?.open(p, showButton);
   };
 

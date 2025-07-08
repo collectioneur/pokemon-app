@@ -108,7 +108,12 @@ export default function map() {
     if (pokemonBottomSheetRef.current) {
       const pokemon = markers.find((m) => m.id === e.id);
       if (!pokemon) return;
-      pokemonBottomSheetRef.current.open(pokemon.PokemonData, false);
+      pokemonBottomSheetRef.current.open(
+        pokemon.PokemonData,
+        false,
+        true,
+        pokemon.id
+      );
     }
     return;
   };
@@ -118,13 +123,18 @@ export default function map() {
       markers,
       tapToleranceMeters(zoomRef.current, e.latitude)
     );
-    console.log("a");
     if (clickedMarker !== null && clickedMarker.coordinates !== null) {
       if (pokemonBottomSheetRef.current) {
         console.log("Clicked marker:", clickedMarker);
         const pokemonId = clickedMarker.id.split("+")[1];
         const pokemon = markers.find((m) => m.id === clickedMarker.id);
-        pokemonBottomSheetRef.current.open(clickedMarker.PokemonData, false);
+
+        pokemonBottomSheetRef.current.open(
+          clickedMarker.PokemonData,
+          false,
+          true,
+          clickedMarker.id
+        );
       }
       return;
     }
@@ -140,6 +150,20 @@ export default function map() {
 
   const moveCamera = (e: any) => {
     zoomRef.current = e.zoom;
+  };
+
+  const onDelete = async (id: string) => {
+    const newMarkers = markers.filter((marker) => marker.id !== id);
+    setMarkers(newMarkers);
+    if (bottomSheetRef.current) {
+      bottomSheetRef.current.close();
+    }
+    try {
+      await AsyncStorage.setItem("@pokemonsOnMap", JSON.stringify(newMarkers));
+      console.log("Markers saved:", newMarkers);
+    } catch (error) {
+      console.error("Markers not saved:", error);
+    }
   };
 
   const createMarker = async (PokemonCardData: PokemonCardData) => {
@@ -213,7 +237,7 @@ export default function map() {
           onMapClick={handleMapClick}
         />
         <MapsBottomSheet ref={bottomSheetRef} createMarker={createMarker} />
-        <PokemonBottomSheet ref={pokemonBottomSheetRef} />
+        <PokemonBottomSheet ref={pokemonBottomSheetRef} onDelete={onDelete} />
       </>
     );
   } else if (Platform.OS === "android") {
@@ -244,7 +268,7 @@ export default function map() {
           onMarkerClick={handleMarkerClick}
         />
         <MapsBottomSheet ref={bottomSheetRef} createMarker={createMarker} />
-        <PokemonBottomSheet ref={pokemonBottomSheetRef} />
+        <PokemonBottomSheet ref={pokemonBottomSheetRef} onDelete={onDelete} />
       </>
     );
   } else {

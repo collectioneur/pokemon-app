@@ -10,7 +10,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.pokemon-app"
+      "bundleIdentifier": "com.yehorkharchenko.pokemon-app"
     },
     "android": {
       "adaptiveIcon": {
@@ -23,7 +23,8 @@
         "googleMaps": {
           "apiKey": "AIzaSyBNCMSSh8av2giYShPmaBB_5roJ29EcIvY"
         }
-      }
+      },
+      "minSdkVersion": 26
     },
     "web": {
       "bundler": "metro"
@@ -45,7 +46,17 @@
           "requestLocationPermission": true,
           "locationPermission": "Allow $(PRODUCT_NAME) to use your location"
         }
-      ]
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "package": "com.anonymous.pokemonapp",
+            "minSdkVersion": 26
+          }
+        }
+      ],
+      "react-native-vision-camera"
     ],
     "experiments": {
       "typedRoutes": true

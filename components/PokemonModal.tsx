@@ -12,6 +12,7 @@ import {
   Star,
   Sword,
   Swords,
+  Trash2,
 } from "lucide-react-native";
 import React, {
   useCallback,
@@ -23,30 +24,46 @@ import { Image, Pressable, Text, View } from "react-native";
 
 interface PokemonBottomSheetProps {
   onFavorite?: (pokemon: PokemonCardData) => void;
+  onDelete?: (id: string) => void;
 }
 
 export type PokemonBottomSheetHandle = {
-  open: (p: PokemonCardData, shwButton?: boolean) => void;
+  open: (
+    p: PokemonCardData,
+    shwButton?: boolean,
+    dltbutton?: boolean,
+    pinId?: string | null
+  ) => void;
   close: () => void;
 };
 
 const PokemonBottomSheet = React.forwardRef<
   PokemonBottomSheetHandle,
   PokemonBottomSheetProps
->(({ onFavorite = () => {} }, ref) => {
+>(({ onFavorite = () => {}, onDelete = () => {} }, ref) => {
   const modalRef = useRef<BottomSheetModal>(null);
   const [pokemon, setPokemon] = useState<PokemonCardData | null>(null);
-  const showButton = useRef(true);
+  const [showButton, setShowButton] = useState(true);
+  const [deleteButton, setDeleteButton] = useState(false);
+  const pinId = useRef<string | null>(null);
 
   useImperativeHandle(ref, () => ({
-    open: (p: PokemonCardData, shwButton = true) => {
-      showButton.current = shwButton;
+    open: (
+      p: PokemonCardData,
+      shwButton = true,
+      dltButton = false,
+      newPinId: string | null = null
+    ) => {
+      console.log(shwButton, dltButton, newPinId);
+      pinId.current = newPinId;
+      setShowButton(shwButton);
+      setDeleteButton(dltButton);
       setPokemon(p);
       modalRef.current?.present();
     },
     close: () => {
       setPokemon(null);
-      showButton.current = true;
+      setShowButton(true);
       modalRef.current?.dismiss();
     },
   }));
@@ -161,7 +178,7 @@ const PokemonBottomSheet = React.forwardRef<
               </View>
             </View>
 
-            {showButton.current && (
+            {showButton && (
               <View className="flex-row space-x-3 mt-6">
                 <Pressable
                   className="flex-row flex-1 items-center gap-2 justify-center bg-yellow-300 rounded-full py-3"
@@ -175,6 +192,21 @@ const PokemonBottomSheet = React.forwardRef<
                   <Text className="text-black font-semibold">
                     Make Favourite
                   </Text>
+                </Pressable>
+              </View>
+            )}
+            {deleteButton && (
+              <View className="flex-row space-x-3 mt-6">
+                <Pressable
+                  className="flex-row flex-1 items-center gap-2 justify-center bg-[##5b21b6] rounded-full py-3"
+                  onPress={() => {
+                    onDelete(pinId.current ?? "");
+                    modalRef.current?.dismiss();
+                  }}
+                  style={({ pressed }) => ({ opacity: pressed ? 0.7 : 1 })}
+                >
+                  <Trash2 size={18} color="#fff" />
+                  <Text className="text-white font-semibold">Delete Pin</Text>
                 </Pressable>
               </View>
             )}
