@@ -2,7 +2,7 @@ import PokemonCard from "@/components/PokemonCard";
 import { PokemonCardData } from "@/types";
 import React, { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
-import { FlatList as FL } from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
 
 interface CameraCarouselProps {
   chooseImage: (uri: string) => void;
@@ -65,7 +65,7 @@ const CameraCarousel: React.FC<CameraCarouselProps> = ({ chooseImage }) => {
   };
 
   return (
-    <FL
+    <FlatList
       className=""
       data={pokemons}
       horizontal={true}

@@ -15,7 +15,7 @@ import React, {
   useState,
 } from "react";
 import { ActivityIndicator, Text, TextInput, View } from "react-native";
-import { FlatList as FL } from "react-native-gesture-handler";
+import { FlatList } from "react-native-gesture-handler";
 
 interface MapsBottomSheetProps {
   createMarker: (PokemonCardData: PokemonCardData) => void;
@@ -25,6 +25,15 @@ export type MapsBottomSheetHandle = {
   open: () => void;
   close: () => void;
 };
+
+const GradientBackground = ({ style }: { style: any }) => (
+  <LinearGradient
+    colors={["#fef08a", "#5b21b6"]}
+    start={{ x: 0.5, y: 0 }}
+    end={{ x: 0.5, y: 1 }}
+    style={[style, { flex: 1, borderRadius: 16 }]}
+  />
+);
 
 const PAGE_SIZE = 6;
 
@@ -122,14 +131,7 @@ const MapsBottomSheet = React.forwardRef<
           pressBehavior="close"
         />
       )}
-      backgroundComponent={({ style }) => (
-        <LinearGradient
-          colors={["#fef08a", "#5b21b6"]}
-          start={{ x: 0.5, y: 0 }}
-          end={{ x: 0.5, y: 1 }}
-          style={[style, { flex: 1, borderRadius: 16 }]}
-        />
-      )}
+      backgroundComponent={({ style }) => <GradientBackground style={style} />}
       enableDynamicSizing={false}
     >
       <BottomSheetView
@@ -157,7 +159,7 @@ const MapsBottomSheet = React.forwardRef<
             <Search size={20} color="#555" />
           </View>
         </View>
-        <FL
+        <FlatList
           data={filtered}
           horizontal={true}
           renderItem={({ item }) => (

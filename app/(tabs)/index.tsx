@@ -1,4 +1,4 @@
-import { FavoriteCard } from "@/components/favoriteCard";
+import { FavoriteCard } from "@/components/FavoriteCard";
 import PC from "@/components/PokemonCard";
 import PokemonBottomSheet, {
   PokemonBottomSheetHandle,
@@ -42,8 +42,6 @@ export default function Index() {
 
   const handlePressCard = (p: PokemonCardData) => {
     const showButton = p.id !== favoritePokemon?.id;
-    console.log(favoritePokemon?.id, p.id);
-    console.log("Show button:", showButton);
     bottomSheetRef.current?.open(p, showButton);
   };
 
@@ -56,7 +54,6 @@ export default function Index() {
     setFavoritePokemon(pokemon);
     try {
       await AsyncStorage.setItem("@favoritePokemon", JSON.stringify(pokemon));
-      console.log("Favorite Pokémon saved:", pokemon);
     } catch (error) {
       console.error("Failed to save favorite Pokémon", error);
     }
@@ -66,7 +63,6 @@ export default function Index() {
     setFavoritePokemon(null);
     try {
       await AsyncStorage.removeItem("@favoritePokemon");
-      console.log("Favorite Pokémon removed");
     } catch (error) {
       console.error("Failed to remove favorite Pokémon", error);
     }

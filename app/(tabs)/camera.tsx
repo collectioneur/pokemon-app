@@ -38,7 +38,6 @@ export default function camera() {
   useEffect(() => {
     (async () => {
       const status = await VisionCamera.requestCameraPermission();
-      console.log(`Camera permission: ${status}`);
     })();
   }, [device]);
 
@@ -69,7 +68,6 @@ export default function camera() {
   }));
 
   const chooseImage = (uri: string) => {
-    console.log("Selected image URI:", uri);
     setImageURI(uri);
   };
 

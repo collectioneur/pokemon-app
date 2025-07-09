@@ -98,7 +98,6 @@ export default function map() {
           }
           marker.image = image;
         }
-        console.log("Markers loaded:", parsedMarkers);
         setMarkers(parsedMarkers);
       }
     })();
@@ -125,7 +124,6 @@ export default function map() {
     );
     if (clickedMarker !== null && clickedMarker.coordinates !== null) {
       if (pokemonBottomSheetRef.current) {
-        console.log("Clicked marker:", clickedMarker);
         const pokemonId = clickedMarker.id.split("+")[1];
         const pokemon = markers.find((m) => m.id === clickedMarker.id);
 
@@ -160,7 +158,6 @@ export default function map() {
     }
     try {
       await AsyncStorage.setItem("@pokemonsOnMap", JSON.stringify(newMarkers));
-      console.log("Markers saved:", newMarkers);
     } catch (error) {
       console.error("Markers not saved:", error);
     }
@@ -196,7 +193,6 @@ export default function map() {
     }
     try {
       await AsyncStorage.setItem("@pokemonsOnMap", JSON.stringify(newMarkers));
-      console.log("Markers saved:", newMarkers);
     } catch (error) {
       console.error("Markers not saved:", error);
     }
